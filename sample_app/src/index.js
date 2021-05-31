@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import './index.css';                           // CSS
+import Omikuji from './components/Omikuji.js';  // おみくじコンポーネント
+import History from './components/History.js';  // 履歴コンポーネント
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Omikuji />
+    <History />
   </React.StrictMode>,
   document.getElementById('root')
 );

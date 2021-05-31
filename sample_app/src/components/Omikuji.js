@@ -1,10 +1,10 @@
-import './App.css';
+//import '../App.css';
 import React, { Component } from 'react';
 //import omikujiButton from './components/omikujiButton';
 //import { render } from 'react-dom';
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import '../initialize.js'; // 初期読み込み
 
-export default class App extends Component {
+export default class Omikuji extends Component {
     
   constructor(props) {
       super(props);
@@ -20,25 +20,14 @@ export default class App extends Component {
   render() {
     return (
       <div className='App'>
-        <header className='App-header'>
-          {/* <omikujiButton />
-          <omikujiCommentBox />
-          <omikujComments /> */}
+        <header style={styles.header}>
           <button id='mainButton'style={styles.circle}  onClick={this.getOmikujiResultData} >{this.state.name}</button>
           <h3>{this.state.comment}</h3>
-          <h3>[履歴]</h3>
-          <li></li>
         </header>
       </div>
     );
   }
 
-  // // ボタンの色を変更する
-  changeButtonColor = () => {
-    //const button1 = document.getElementById("button1");
-    //button1.style.background = item.buttonColor;
-    console.log('AAA');
-  }
   // おみくじ用運勢のデータをランダムに取得
   getOmikujiResultData = () => {
     // おみくじのデータ
@@ -55,7 +44,7 @@ export default class App extends Component {
     // 乱数でstateを変更する
     const random = Math.random(); //　0以上1未満の乱数取得
     let p = 0 //pの初期値を0として設定
-    for (const item of omikujiData) {//omikujiDataの中身を一つずつ順にitemに入れる。中身すべてを入れ終わるまで回る
+    for (const item of omikujiData) { //omikujiDataの中身を一つずつ順にitemに入れる。中身すべてを入れ終わるまで回る
       p = p+item.probability // 前回のpをprobabilityに足した値が今回のpとなる
       if (random < p) { // もし乱数の値をpが超えたら
         // state変更
@@ -65,13 +54,6 @@ export default class App extends Component {
           probability: item.probability,
           buttonColor: item.buttonColor
         });
-        //ローカルストレージにおみくじ結果の配列を保存
-        //const MAX_SAVE_COUNT = 10; // ローカルストレージに保存するデータの最大数
-
-        // 履歴を表示
-        const li = document.createElement('li');
-        //changeButtonColor();
-        localStorage.setItem('stateData', JSON.stringify(this.state));
 
         // ボタンの色を変更
         const mainButton = document.getElementById("mainButton");
@@ -79,6 +61,14 @@ export default class App extends Component {
         break;
       }
     }
+    const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
+    //storeHistory(item); // 履歴
+    //ローカルストレージにおみくじ結果の配列を保存 
+    //const MAX_SAVE_COUNT = 10; // ローカルストレージに保存するデータの最大数
+    localStorage.setItem('omikuji-history', JSON.stringify(this.state)); // ローカルストレージにおみくじの結果を保存
+    //const history = localStorage.getItem('omikuji-history')//'omikuji-history'という名のローカルストレージのデータをhistoryに入れる
+
+    
 
   }
 }
@@ -93,4 +83,15 @@ const styles = {
     background: 'white',
     fontSize: 40,
   },
+  header: {
+    minHeight: 50,
+    background: '#282c34',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 20,
+    color: 'white',
+  }
+  
 };
