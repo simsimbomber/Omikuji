@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 //import omikujiButton from './components/omikujiButton';
 //import { render } from 'react-dom';
-import '../initialize.js'; // 初期読み込み
+import history from '../initialize.js'; // 初期読み込み
 
 export default class Omikuji extends Component {
     
@@ -26,6 +26,46 @@ export default class Omikuji extends Component {
         </header>
       </div>
     );
+  }
+
+  // ボタンの色を変更
+  changeButtonColor = (item) => {
+    const mainButton = document.getElementById("mainButton");
+    mainButton.style.background = item.buttonColor;
+  }
+
+  // ローカルストレージに値を保存
+  saveResultOmikujiData = (history) => {
+    const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
+    console.log('item:'+item);
+    const MAX_SAVE_COUNT = 10; // ローカルストレージに保存するデータの最大数
+    
+    if (MAX_SAVE_COUNT < history.length) { // もし配列の要素数が１０以上の場合は古い順に削除
+      history.shift(); // 要素番号０の値を削除
+    }
+    history.push({ id: new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }), item: item }); // 変数history配列に格納
+    localStorage.setItem('omikuji-history', JSON.stringify(history)); // ローカルストレージにおみくじの結果（配列）を保存
+  }
+
+  // 画面に履歴に表示
+  drawHistory = (history) => {
+    // removeChildren(element)//一番古い履歴を削除(子ノードのリストを削除)
+    //slice()は、文字列や配列などからデータの一部分だけ取り出せるメソッドになります
+    //hoge.reverse() で破壊的。hoge.slice().reverse() で非破壊的.逆順にしたhistoryをrecordにいれる
+    //「配列」historyの値を1つずつ「変数recordへ代入してくれるようになります。
+    for (const record of history.slice().reverse()) {
+      const time = record.id;
+      const omikujiResult = record.item;
+      console.log(time);
+      console.log(omikujiResult);
+
+    }
+    // const { id, item } = record;
+    // const li = document.createElement('li');
+    // li.setAttribute('id', id)
+    // li.innerHTML = getHistoryRecordHtml(item.name, item.comment, id)
+    // li.addEventListener('click', clickRecord, false)//処理⓶履歴クリック時
+    // element.appendChild(li)
   }
 
   // おみくじ用運勢のデータをランダムに取得
@@ -56,21 +96,18 @@ export default class Omikuji extends Component {
         });
 
         // ボタンの色を変更
-        const mainButton = document.getElementById("mainButton");
-        mainButton.style.background = item.buttonColor;
+        this.changeButtonColor(item);
+        //
+        console.log('item1:'+JSON.stringify(this.state));
         break;
       }
     }
-    const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
-    //storeHistory(item); // 履歴
-    //ローカルストレージにおみくじ結果の配列を保存 
-    //const MAX_SAVE_COUNT = 10; // ローカルストレージに保存するデータの最大数
-    localStorage.setItem('omikuji-history', JSON.stringify(this.state)); // ローカルストレージにおみくじの結果を保存
-    //const history = localStorage.getItem('omikuji-history')//'omikuji-history'という名のローカルストレージのデータをhistoryに入れる
-
-    
-
-  }
+    console.log('item2:'+JSON.stringify(this.state));
+    // 【１】ローカルストレージに値を保存
+    this.saveResultOmikujiData(history);
+    // 【２】履歴にローカルストレージの値を表示
+    this.drawHistory(history);
+  } 
 }
 
 // CSS in Js
