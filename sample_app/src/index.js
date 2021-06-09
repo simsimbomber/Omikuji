@@ -7,8 +7,12 @@ import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Omikuji />
-    <History />
+    <div>
+      <header>
+        <Omikuji />
+        <History />
+      </header>
+    </div>
   </React.StrictMode>,
   document.getElementById('root')
 );
