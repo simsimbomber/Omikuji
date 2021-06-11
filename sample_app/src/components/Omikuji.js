@@ -63,14 +63,16 @@ export default class Omikuji extends Component {
     //hoge.reverse() で破壊的。hoge.slice().reverse() で非破壊的.逆順にしたhistoryをrecordにいれる
     //「配列」historyの値を1つずつ「変数recordへ代入してくれるようになります。
     for (const record of history.slice().reverse()) {
-      console.log('record:'+JSON.stringify(record));
+      //console.log('NORMAL：'+record);
+      console.log('JSON形式：'+JSON.stringify(record.id));
       const { id, item } = record;
-      // console.log(id);
-      // console.log(JSON.stringify(item).name);
 
-      // console.log('record:'+record);
-      // console.log('id:'+id);
-      console.log('item:'+item.name);
+      //console.log(item);
+      //console.log('id:'+id);
+// js item:{"name":"大凶","comment":"うわぁあああ！","prob":0.09,"className":"E"}
+// Re item:{"name":"中吉","comment":"まあまぁの一日です","probability":0.2,"buttonColor":"blue"}
+
+      //console.log('item:'+item.name);
 
       // const time = record.id;
       // const omikujiResult = JSON.stringify(JSON.parse(record.item));
