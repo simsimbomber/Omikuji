@@ -28,6 +28,13 @@ export default class Omikuji extends Component {
     );
   }
 
+  // stateの値が変化した後の処理(コールバック関数)
+  afterChangeStateAction = (history, item) => () => {
+    this.saveResultOmikujiData(history); //【1】ローカルストレージに値を保存
+    this.changeButtonColor(item);        //【2】ボタンの色を変更
+    this.drawHistory(history);           //【3】履歴にローカルストレージの値を表示
+  }
+
   // ボタンの色を変更
   changeButtonColor = (item) => {
     console.log('★changeButtonColor★');
@@ -36,13 +43,12 @@ export default class Omikuji extends Component {
   }
 
   // ローカルストレージに値を保存
-  saveResultOmikujiData = (history) => () => {
+  saveResultOmikujiData = (history) => {
     console.log('★saveResultOmikujiData★');
-    console.log('stateの値:'+JSON.stringify(this.state.name));
     const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
     const MAX_SAVE_COUNT = 10;               // ローカルストレージに保存するデータの最大数
     
-    if (MAX_SAVE_COUNT <= history.length ) { // もし配列の要素数が１０以上の場合は古い順に削除
+    if (MAX_SAVE_COUNT <= history.length ) { // もし配列の要素数が10以上の場合は古い順に削除
       history.shift(); // 要素番号0の値を削除
     }
     history.push({ id: new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }), item: item }); // 変数history配列に格納
@@ -52,16 +58,19 @@ export default class Omikuji extends Component {
   // 画面に履歴を表示
   drawHistory = (history) => {
     console.log('★drawHistory★');
-    console.log('stateの値(drawHistory):'+JSON.stringify(this.state.name));
     // removeChildren(element)//一番古い履歴を削除(子ノードのリストを削除)
     //slice()は、文字列や配列などからデータの一部分だけ取り出せるメソッドになります
     //hoge.reverse() で破壊的。hoge.slice().reverse() で非破壊的.逆順にしたhistoryをrecordにいれる
     //「配列」historyの値を1つずつ「変数recordへ代入してくれるようになります。
     for (const record of history.slice().reverse()) {
+      console.log('record:'+JSON.stringify(record));
       const { id, item } = record;
+      // console.log(id);
+      // console.log(JSON.stringify(item).name);
+
       // console.log('record:'+record);
       // console.log('id:'+id);
-      // console.log('item:'+item.name);
+      console.log('item:'+item.name);
 
       // const time = record.id;
       // const omikujiResult = JSON.stringify(JSON.parse(record.item));
@@ -106,17 +115,11 @@ export default class Omikuji extends Component {
           probability: item.probability,
           buttonColor: item.buttonColor
         },
-        this.saveResultOmikujiData(history) // stateは非同期処理なのでコールバック関数として第２引数に設定。
+        this.afterChangeStateAction(history ,item) // stateは非同期処理なのでコールバック関数として第２引数に設定。
         );
-        // 【1】ボタンの色を変更
-        this.changeButtonColor(item);
         break;
       }
     }
-    // 【2】ローカルストレージに値を保存
-    //this.saveResultOmikujiData(history);
-    // 【3】履歴にローカルストレージの値を表示
-    this.drawHistory(history);
   }
 }
 
