@@ -66,6 +66,11 @@ export default class Omikuji extends Component {
       //console.log('NORMAL：'+record);
       console.log('JSON形式：'+JSON.stringify(record.id));
       const { id, item } = record;
+      const newLi = document.createElement('li'); // 新しくliダグを生成
+      newLi.setAttribute('id', id); // liタグにidという属性を指定し、そのidの値に変数idを格納
+      console.log(newLi);
+      newLi.innerHTML = 'TIME/'+id;
+      h3.appendChild(newLi);
 
       //console.log(item);
       //console.log('id:'+id);
