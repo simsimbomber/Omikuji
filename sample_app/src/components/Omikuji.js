@@ -23,6 +23,7 @@ export default class Omikuji extends Component {
         <header style={styles.header}>
           <button id='mainButton'style={styles.circle}  onClick={this.getOmikujiResultData} >{this.state.name}</button>
           <h3>{this.state.comment}</h3>
+          <h4></h4>
         </header>
       </div>
     );
@@ -44,10 +45,15 @@ export default class Omikuji extends Component {
 
   // ローカルストレージに値を保存
   saveResultOmikujiData = (history) => {
+    console.log(this.state);
     console.log('★saveResultOmikujiData★');
-    const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
+    //const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
+    const item = this.state; // 今回の運勢結果を変数に格納
+
     const MAX_SAVE_COUNT = 10;               // ローカルストレージに保存するデータの最大数
-    
+    console.log('history='+history);
+    console.log('item='+item);
+
     if (MAX_SAVE_COUNT <= history.length ) { // もし配列の要素数が10以上の場合は古い順に削除
       history.shift(); // 要素番号0の値を削除
     }
@@ -58,36 +64,24 @@ export default class Omikuji extends Component {
   // 画面に履歴を表示
   drawHistory = (history) => {
     console.log('★drawHistory★');
+    //('.History')//クラス "history" を持つ文書内の要素の内、最初のもの(一番古い履歴リスト)を返します。
+    //console.loglog(historyElement);
+    //const A = document.getAttribute('h4');
     // removeChildren(element)//一番古い履歴を削除(子ノードのリストを削除)
     //slice()は、文字列や配列などからデータの一部分だけ取り出せるメソッドになります
     //hoge.reverse() で破壊的。hoge.slice().reverse() で非破壊的.逆順にしたhistoryをrecordにいれる
     //「配列」historyの値を1つずつ「変数recordへ代入してくれるようになります。
     for (const record of history.slice().reverse()) {
-      //console.log('NORMAL：'+record);
-      console.log('JSON形式：'+JSON.stringify(record.id));
       const { id, item } = record;
       const newLi = document.createElement('li'); // 新しくliダグを生成
       newLi.setAttribute('id', id); // liタグにidという属性を指定し、そのidの値に変数idを格納
+      newLi.innerHTML = 'TIME:' + id + '/Fortune:' + item.name; // liタグのHTMLを挿入
       console.log(newLi);
-      newLi.innerHTML = 'TIME/'+id;
-      h3.appendChild(newLi);
 
-      //console.log(item);
-      //console.log('id:'+id);
-// js item:{"name":"大凶","comment":"うわぁあああ！","prob":0.09,"className":"E"}
-// Re item:{"name":"中吉","comment":"まあまぁの一日です","probability":0.2,"buttonColor":"blue"}
-
-      //console.log('item:'+item.name);
-
-      // const time = record.id;
-      // const omikujiResult = JSON.stringify(JSON.parse(record.item));
-      // console.log(omikujiResult.name);
-      // const redordLst = omikujiResult + time; 
-      // console.log(redordLst);
-      //console.log(time);
-      //console.log(omikujiResult);
-
+      //h4.appendChild(newLi);
     }
+    
+
     // const { id, item } = record;
     // const li = document.createElement('li');
     // li.setAttribute('id', id)
@@ -108,6 +102,7 @@ export default class Omikuji extends Component {
       { name: '凶', comment: '結構悪い一日です', probability: 0.1 , buttonColor: 'skyblue' },
       { name: '大凶', comment: '最低最悪の一日です', probability: 0.05, buttonColor: 'purple' }
     ];
+
 
     // 乱数でstateを変更する
     const random = Math.random(); //　0以上1未満の乱数取得
