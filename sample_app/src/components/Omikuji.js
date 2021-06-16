@@ -47,7 +47,6 @@ export default class Omikuji extends Component {
   saveResultOmikujiData = (history) => {
     console.log(this.state);
     console.log('★saveResultOmikujiData★');
-    //const item = JSON.stringify(this.state); // 今回の運勢結果を変数に格納
     const item = this.state; // 今回の運勢結果を変数に格納
 
     const MAX_SAVE_COUNT = 10;               // ローカルストレージに保存するデータの最大数
