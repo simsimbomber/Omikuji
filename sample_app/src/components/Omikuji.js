@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 //import omikujiButton from './components/omikujiButton';
 //import { render } from 'react-dom';
-import history from '../initialize.js'; // 初期読み込み
+import config from '../initialize.js'; // 初期読み込み
 
 export default class Omikuji extends Component {
     
@@ -30,10 +30,10 @@ export default class Omikuji extends Component {
   }
 
   // stateの値が変化した後の処理(コールバック関数)
-  afterChangeStateAction = (history, item) => () => {
-    this.saveResultOmikujiData(history); //【1】ローカルストレージに値を保存
+  afterChangeStateAction = (config, item) => () => {
+    this.saveResultOmikujiData(config.history, config.max_save_count); //【1】ローカルストレージに値を保存
     this.changeButtonColor(item);        //【2】ボタンの色を変更
-    this.drawHistory(history);           //【3】履歴にローカルストレージの値を表示
+    this.drawHistory(config.history);           //【3】履歴にローカルストレージの値を表示
   }
 
   // ボタンの色を変更
@@ -44,16 +44,15 @@ export default class Omikuji extends Component {
   }
 
   // ローカルストレージに値を保存
-  saveResultOmikujiData = (history) => {
+  saveResultOmikujiData = (history, max_save_count) => {
     console.log(this.state);
     console.log('★saveResultOmikujiData★');
     const item = this.state; // 今回の運勢結果を変数に格納
 
-    const MAX_SAVE_COUNT = 10;               // ローカルストレージに保存するデータの最大数
     console.log('history='+history);
     console.log('item='+item);
 
-    if (MAX_SAVE_COUNT <= history.length ) { // もし配列の要素数が10以上の場合は古い順に削除
+    if (max_save_count <= history.length ) { // もし配列の要素数が10以上の場合は古い順に削除
       history.shift(); // 要素番号0の値を削除
     }
     history.push({ id: new Date().toLocaleString({ timeZone: 'Asia/Tokyo' }), item: item }); // 変数history配列に格納
@@ -116,7 +115,7 @@ export default class Omikuji extends Component {
           probability: item.probability,
           buttonColor: item.buttonColor
         },
-        this.afterChangeStateAction(history ,item) // stateは非同期処理なのでコールバック関数として第２引数に設定。
+        this.afterChangeStateAction(config ,item) // stateは非同期処理なのでコールバック関数として第２引数に設定。
         );
         break;
       }

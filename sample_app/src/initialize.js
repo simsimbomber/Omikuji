@@ -12,7 +12,19 @@ if(localStorage.getItem('omikuji-history')) { // ローカルストレージ存�
     // ないとき
     localStorage.setItem('omikuji-history', ''); // key:omikuji-historyでvalueが空のローカルストレージ作成
 }
-export default history; // おみくじの履歴を渡す
+
+// 値をまとめて渡すためにオブジェクト作成
+const config = {
+    history: history, // おみくじの履歴
+    max_save_count: 10, // 履歴の表示最大数　
+}
+
+export default config; // 固定値を渡す
+
+// export default config
 
 
 
+// import config from './init'
+
+// config.max
