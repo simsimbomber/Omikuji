@@ -2,6 +2,8 @@
 import './function.js'; // 関数まとめファイル
 
 // 以下は初期読み込み
+// const historyElement = document.querySelector('.history');//クラス "history" を持つ文書内の要素の内、最初のもの(一番古い履歴リスト)を返します。
+
 console.log('initialize.jsによる初期読み込み');
 let history = []; // 配列で履歴作成 
 if(localStorage.getItem('omikuji-history')) { // ローカルストレージ存在チェック
@@ -17,6 +19,7 @@ if(localStorage.getItem('omikuji-history')) { // ローカルストレージ存�
 const config = {
     history: history, // おみくじの履歴
     max_save_count: 10, // 履歴の表示最大数　
+    // historyElement: historyElement, // 履歴を表示する要素
 }
 
 export default config; // 固定値を渡す

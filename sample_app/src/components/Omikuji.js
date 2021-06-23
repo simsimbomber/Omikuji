@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 //import omikujiButton from './components/omikujiButton';
 //import { render } from 'react-dom';
+//import History from './History';
 import config from '../initialize.js'; // 初期読み込み
-
-export default class Omikuji extends Component {
-    
+class Omikuji extends Component {
+  
   constructor(props) {
       super(props);
       this.state = {
@@ -19,12 +19,11 @@ export default class Omikuji extends Component {
   // 初期描画
   render() {
     return (
-      <div className='App'>
-        <header style={styles.header}>
-          <button id='mainButton'style={styles.circle}  onClick={this.getOmikujiResultData} >{this.state.name}</button>
-          <h3>{this.state.comment}</h3>
-          <h4></h4>
-        </header>
+      <div style={styles.header}>
+        <button id='mainButton' style={styles.circle}  onClick={this.getOmikujiResultData} >{this.state.name}</button>
+        <h3>{this.state.comment}</h3>
+        <p>[履歴]</p>
+        <div id='historyArray' className='history'></div>
       </div>
     );
   }
@@ -59,12 +58,20 @@ export default class Omikuji extends Component {
     localStorage.setItem('omikuji-history', JSON.stringify(history)); // ローカルストレージにおみくじの結果（配列）を保存
   }
 
+  // 与えられた要素（引数）の子ノードを全削除
+  removeChildren = (element) => {
+    console.log(element);
+    while (element.firstChild) {//最も古い履歴リストの
+      element.removeChild(element.firstChild);
+    }
+  }
+
   // 画面に履歴を表示
   drawHistory = (history) => {
     console.log('★drawHistory★');
-    //('.History')//クラス "history" を持つ文書内の要素の内、最初のもの(一番古い履歴リスト)を返します。
-    //console.loglog(historyElement);
-    //const A = document.getAttribute('h4');
+    const historyElement = document.querySelector('.history');//クラス "history" を持つ文書内の要素の内、最初のもの(一番古い履歴リスト)を返します。
+    this.removeChildren(historyElement);
+  
     // removeChildren(element)//一番古い履歴を削除(子ノードのリストを削除)
     //slice()は、文字列や配列などからデータの一部分だけ取り出せるメソッドになります
     //hoge.reverse() で破壊的。hoge.slice().reverse() で非破壊的.逆順にしたhistoryをrecordにいれる
@@ -72,20 +79,16 @@ export default class Omikuji extends Component {
     for (const record of history.slice().reverse()) {
       const { id, item } = record;
       const newLi = document.createElement('li'); // 新しくliダグを生成
+      console.log('test1:'+newLi);
+      newLi.style.padding = "5";
+
+      console.log('test2:'+newLi);
+
+      //newLi.classList.add('list-group-item-dark');
       newLi.setAttribute('id', id); // liタグにidという属性を指定し、そのidの値に変数idを格納
-      newLi.innerHTML = 'TIME:' + id + '/Fortune:' + item.name; // liタグのHTMLを挿入
-      console.log(newLi);
-
-      //h4.appendChild(newLi);
+      newLi.innerHTML = id + '　　' + item.name; // liタグのHTMLを挿入
+      historyElement.appendChild(newLi);
     }
-    
-
-    // const { id, item } = record;
-    // const li = document.createElement('li');
-    // li.setAttribute('id', id)
-    // li.innerHTML = getHistoryRecordHtml(item.name, item.comment, id)
-    // li.addEventListener('click', clickRecord, false)//処理⓶履歴クリック時
-    // element.appendChild(li)
   }
 
   // おみくじ用運勢のデータをランダムに取得
@@ -123,6 +126,8 @@ export default class Omikuji extends Component {
   }
 }
 
+export default Omikuji;
+
 // CSS in Js
 const styles = {
   circle: {
@@ -142,6 +147,13 @@ const styles = {
     justifyContent: 'center',
     fontSize: 20,
     color: 'white',
-  }
-  
+  },
+  // .: {
+  //   background: 'ThreeDHighlight',
+  //   padding: 5,
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   fontSize: 20,
+  // },
+
 };

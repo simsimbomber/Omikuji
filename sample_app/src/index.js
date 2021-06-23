@@ -3,21 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';                           // CSS
 import Omikuji from './components/Omikuji.js';  // おみくじコンポーネント
 import History from './components/History.js';  // 履歴コンポーネント
-import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
     <div>
       <header>
+      {/* <button type="button" class="btn btn-secondary">test</button> */}
         <Omikuji />
-        <History />
+        {/* <History /> */}
       </header>
     </div>
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
