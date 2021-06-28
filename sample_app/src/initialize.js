@@ -15,6 +15,7 @@ if(localStorage.getItem('omikuji-history')) { // ローカルストレージ存�
     localStorage.setItem('omikuji-history', ''); // key:omikuji-historyでvalueが空のローカルストレージ作成
 }
 
+
 // 値をまとめて渡すためにオブジェクト作成
 const config = {
     history: history, // おみくじの履歴

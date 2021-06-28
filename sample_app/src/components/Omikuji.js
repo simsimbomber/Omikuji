@@ -28,6 +28,11 @@ class Omikuji extends Component {
     );
   }
 
+  // // // ローカルストレージにおみくじの履歴がある際には画面に表示する
+  // if (config.history.length > 0) {//もし履歴の要素の数が０より大きいとき
+  // // // this.drawHistory(config.history);
+  // }
+
   // stateの値が変化した後の処理(コールバック関数)
   afterChangeStateAction = (config, item) => () => {
     this.saveResultOmikujiData(config.history, config.max_save_count); //【1】ローカルストレージに値を保存
@@ -124,9 +129,18 @@ class Omikuji extends Component {
       }
     }
   }
+
+  
 }
 
 export default Omikuji;
+
+const a =10;
+console.log(a);
+  // // // ローカルストレージにおみくじの履歴がある際には画面に表示する
+  // if (config.history.length > 0) {//もし履歴の要素の数が０より大きいとき
+  // this.drawHistory(config.history);
+  // }
 
 // CSS in Js
 const styles = {
