@@ -1,32 +1,25 @@
-//import '../App.css';
 import React, { Component } from 'react';
-//import omikujiButton from './components/omikujiButton';
-//import { render } from 'react-dom';
-//import History from './History';
+import React, {useState} from 'react';
 import config from '../initialize.js'; // 初期読み込み
-class Omikuji extends Component {
-  
-  constructor(props) {
-      super(props);
-      this.state = {
-        name: 'push',
-        comment: 'ここに運勢を表示します',
-        probability: '',
-        buttonColor: '',
-      };
-  }
+const Omikuji = () => {
+  const [isPublished, togglePublished] = useState(false);
+
+  // this.state = {
+  //   name: 'push',
+  //   comment: 'ここに運勢を表示します',
+  //   probability: '',
+  //   buttonColor: ''
+  // }
   
   // 初期描画
-  render() {
-    return (
-      <div style={styles.header}>
-        <button id='mainButton' style={styles.circle}  onClick={this.getOmikujiResultData} >{this.state.name}</button>
-        <h3>{this.state.comment}</h3>
-        <p>[履歴]</p>
-        <div id='historyArray' className='history'></div>
-      </div>
-    );
-  }
+  return (
+    <div style={styles.header}>
+      <button id='mainButton' style={styles.circle}  onClick={this.getOmikujiResultData} >{this.state.name}</button>
+      <h3>{this.state.comment}</h3>
+      <p>[履歴]</p>
+      <div id='historyArray' className='history'></div>
+    </div>
+  );
 
   // // // ローカルストレージにおみくじの履歴がある際には画面に表示する
   // if (config.history.length > 0) {//もし履歴の要素の数が０より大きいとき
