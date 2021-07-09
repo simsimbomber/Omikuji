@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import config from '../initialize.js'; // 初期読み込み
 
 const Omikuji2 = () => {
-  const [state, setState] = useState(
+  const [state, setOmikujiResult] = useState(
     {
       name: 'push', 
       comment: 'ここに運勢を表示します', 
@@ -10,12 +10,29 @@ const Omikuji2 = () => {
       buttonColor: ''
     }
   );
+
+  // // renderで再描画されるたびに実行する内容
+  // const historys = useEffect(()=>{
+  //   console.log('useEffect実行（初期描画＋再描画）');
+  //   if(localStorage.getItem('omikuji-history')) { // ローカルストレージ存在チェック
+  //     // あるとき
+  //     localStorage.setItem('omikuji-history', localStorage.getItem('omikuji-history')); // 履歴の永続化　＊omikuji-historyに
+  //     historys = JSON.parse(localStorage.getItem('omikuji-history')); // ローカルストレージの値を格納。＊JSON.parsesによって配列として持ってこれてる。JSON.parsesがないと文字列として認識されてしまう。
+  //     return historys;
+  //   } else {
+  //     // ないとき
+  //     localStorage.setItem('omikuji-history', ''); // key:omikuji-historyでvalueが空のローカルストレージ作成
+  //   }
+  // });
+  
+  // console.log(historys);
+
   
   // 画面に履歴を表示
   const drawHistory = (history) => {
     console.log('★drawHistory★');
-    const historyElement = document.querySelector('.history');//クラス "history" を持つ文書内の要素の内、最初のもの(一番古い履歴リスト)を返します。
-    this.removeChildren(historyElement);
+    const historyElement = document.querySelector('.history'); //クラス "history" を持つ文書内の要素の内、最初のもの(一番古い履歴リスト)を返します。
+    removeChildren(historyElement);
   
     // removeChildren(element)//一番古い履歴を削除(子ノードのリストを削除)
     //slice()は、文字列や配列などからデータの一部分だけ取り出せるメソッドになります
@@ -67,11 +84,11 @@ const Omikuji2 = () => {
     localStorage.setItem('omikuji-history', JSON.stringify(history)); // ローカルストレージにおみくじの結果（配列）を保存
   }
 
-  // stateの値が変化した後の処理(コールバック関数)
-  const afterChangeStateAction = (config, item) => () => {
-    this.saveResultOmikujiData(config.history, config.max_save_count); //【1】ローカルストレージに値を保存
-    this.changeButtonColor(item);        //【2】ボタンの色を変更
-    this.drawHistory(config.history);           //【3】履歴にローカルストレージの値を表示
+  // stateの値が変化した後の処理
+  const afterChangeStateAction = (config, item)  => {
+    saveResultOmikujiData(config.history, config.max_save_count); //【1】ローカルストレージに値を保存
+    changeButtonColor(item);                                      //【2】ボタンの色を変更
+    drawHistory(config.history);                                  //【3】履歴にローカルストレージの値を表示
   }
 
   // おみくじ用運勢のデータをランダムに取得
@@ -94,25 +111,30 @@ const Omikuji2 = () => {
       p = p+item.probability // 前回のpをprobabilityに足した値が今回のpとなる
       if (random < p) { // もし乱数の値をpが超えたら
         //state変更
-        setState({
+
+        // 非同期処理を同期的に処理したい（HooksではsetStateは使えない）
+        // 先に実行したい
+        setOmikujiResult({
           name: item.name,
           comment: item.comment,
           probability: item.probability,
           buttonColor: item.buttonColor
-        },
-        afterChangeStateAction(config ,item) // stateは非同期処理なのでコールバック関数として第２引数に設定。
-        );
+        });
+
+        //　後に実行したい
+        afterChangeStateAction(config, item);
         break;
       }
     }
   }
+  
 
   // 画面描画
   return (
   <div>
     <button id='mainButton' style={styles.circle} onClick={getOmikujiResultData} >{state.name}</button>
-    <h3>{state.comment}</h3>
-    <p>[履歴]</p>
+    <h3 style={styles.main}>{state.comment}</h3>
+    <p style={styles.main}>[履歴]</p>
     <div id='historyArray' className='history'></div>
   </div>
   );
@@ -140,6 +162,15 @@ const styles = {
     justifyContent: 'center',
     fontSize: 20,
     color: 'white',
+  },
+  main: {
+    minHeight: 50,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: 20,
+
   }
 };
 
