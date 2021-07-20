@@ -24,11 +24,3 @@ const config = {
 }
 
 export default config; // 固定値を渡す
-
-// export default config
-
-
-
-// import config from './init'
-
-// config.max

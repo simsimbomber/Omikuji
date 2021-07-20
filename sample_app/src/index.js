@@ -14,6 +14,7 @@ ReactDOM.render(
       <header>
         {/* <Omikuji /> */}
         <Omikuji2 />
+        <History />
       </header>
     </div>
   </React.StrictMode>,

@@ -7,7 +7,7 @@ const Omikuji2 = () => {
       name: 'push', 
       comment: 'ここに運勢を表示します', 
       probability: '', 
-      buttonColor: ''
+      buttonColor: 'grey'
     }
   );
 
@@ -60,13 +60,6 @@ const Omikuji2 = () => {
     }
   }
 
-  // ボタンの色を変更
-  const changeButtonColor = (item) => {
-    console.log('★changeButtonColor★');
-    const mainButton = document.getElementById("mainButton");
-    mainButton.style.background = item.buttonColor;
-  }
-
   // ローカルストレージに値を保存
   const saveResultOmikujiData = (history, max_save_count) => {
     console.log(state);
@@ -87,10 +80,13 @@ const Omikuji2 = () => {
   const afterChangeStateAction = (config, state)  => {
     console.log('config:'+JSON.stringify(config));
     console.log('state:'+JSON.stringify(state));
-
-    saveResultOmikujiData(config.history, config.max_save_count); //【1】ローカルストレージに値を保存
-    changeButtonColor(state);                                     //【2】ボタンの色を変更
-    drawHistory(config.history);                                  //【3】履歴にローカルストレージの値を表示
+    const initialValue = 'push'; // ボタンの初期値
+    drawHistory(config.history);　                                   // 履歴の初期表示【0】履歴にローカルストレージの値を表示
+    // stateの値が変わるたびにuseEffectによって呼ばれてしまうため、初期値のpushという名前の運勢結果のときにはおみくじの結果とはしない
+    if (state.name != initialValue) {
+      saveResultOmikujiData(config.history, config.max_save_count); //【1】ローカルストレージに値を保存
+      drawHistory(config.history);                                  //【3】履歴にローカルストレージの値を表示
+    }
   }
 
   // おみくじ用運勢のデータをランダムに取得
@@ -133,11 +129,11 @@ const Omikuji2 = () => {
   return (
   <div>
     <div style={styles.button_wrapper}>
-      <button id='mainButton' style={styles.circle} onClick={useGetOmikujiResultData} >{state.name}</button>
+      <button id='mainButton' style={{width: 200, height: 200, borderRadius: 100, color: 'black', background: state.buttonColor, fontSize: 40}} onClick={useGetOmikujiResultData} >{state.name}</button>
     </div>
-    <div>
-      <h3 style={styles.main}>{state.comment}</h3>
-      <p style={styles.main}>[履歴]</p>
+    <div style={styles.main}>
+      <h3>{state.comment}</h3>
+      <p>[履歴]</p>
     <div id='historyArray' className='history'></div>
     </div>
   </div>
@@ -154,7 +150,7 @@ const styles = {
     height: 200,
     borderRadius: 100,
     color: 'black',
-    background: 'white',
+    background: 'grey',
     fontSize: 40,
   },
   header: {
